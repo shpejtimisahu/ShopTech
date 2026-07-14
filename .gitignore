@@ -1,0 +1,23 @@
+# Backend
+__pycache__/
+*.pyc
+.env
+*.db
+venv/
+.venv/
+
+# Frontend
+node_modules/
+dist/
+.vite/
+
+# Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+# IDE
+.idea/
+
+# Backups manuale (mos i ruaj si zip brenda repo)
+*.zip
+*.sql
+
