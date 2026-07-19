@@ -22,7 +22,7 @@ function Returns() {
 
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">4. Refunds</h2>
-          <p>Once we receive and inspect the returned item, your refund will be processed to the original payment method within 5–7 business days through Stripe.</p>
+          <p>Once we receive and inspect the returned item, your refund will be processed in cash or via bank transfer within 5–7 business days.</p>
         </section>
 
         <section>

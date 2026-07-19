@@ -22,7 +22,7 @@ function Terms() {
 
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">4. Payment</h2>
-          <p>Payments are processed through Stripe. By placing an order, you confirm that the payment information you provide is accurate and that you are authorized to use the payment method.</p>
+          <p>Payments are made in cash upon delivery. By placing an order, you confirm that the delivery information you provide is accurate and that you will be available to receive and pay for the order.</p>
         </section>
 
         <section>

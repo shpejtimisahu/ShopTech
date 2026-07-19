@@ -5,6 +5,7 @@ from app.models.user import User
 from app.schemas.user import UserCreate, UserOut
 from app.utils.hash import hash_password
 from app.utils.jwt import get_current_user, get_current_admin
+from app.core.config import settings
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -58,6 +59,8 @@ def remove_admin(user_id: int, db: Session = Depends(get_db), current_admin: Use
         raise HTTPException(status_code=404, detail="User not found")
     if user.id == current_admin.id:
         raise HTTPException(status_code=400, detail="Cannot remove your own admin role")
+    if user.username == settings.ADMIN_USERNAME:
+        raise HTTPException(status_code=400, detail="Cannot remove the primary admin")
     user.is_admin = False
     db.commit()
     db.refresh(user)

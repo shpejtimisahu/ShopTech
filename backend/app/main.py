@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.db.base import init_db
-from app.routers import user, auth, product, cart, order, recommendations, payment, stats
+from app.routers import user, auth, product, cart, order, recommendations, stats
 
 app = FastAPI(title="E-Commerce Backend")
 
@@ -28,7 +28,6 @@ app.include_router(product.router)
 app.include_router(cart.router)
 app.include_router(order.router)
 app.include_router(recommendations.router)
-app.include_router(payment.router)
 app.include_router(stats.router)
 
 @app.get("/")

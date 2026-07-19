@@ -6,8 +6,8 @@ function PaymentSuccess() {
   return (
     <div className="max-w-md mx-auto text-center py-16">
       <div className="text-6xl mb-4">🎉</div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h2>
-      <p className="text-gray-500 mb-8">Your order has been placed successfully.</p>
+      <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Placed!</h2>
+      <p className="text-gray-500 mb-8">Your order has been placed successfully. Pay in cash when it arrives.</p>
       <div className="flex flex-col gap-3">
         <button
           onClick={() => navigate("/orders")}

@@ -156,7 +156,10 @@ function Home() {
               </button>
               {recommendations.length > 0 && (
                 <div className="mt-6">
-                  <h3 className="text-base font-semibold text-gray-900 mb-3">🤖 You might also like</h3>
+                  <div className="mb-3">
+                    <h3 className="text-base font-semibold text-gray-900">Recommended for You</h3>
+                    <p className="text-xs text-gray-400 mt-0.5">Similar products based on analysis</p>
+                  </div>
                   <div className="grid grid-cols-3 gap-3">
                     {recommendations.map(rec => (
                       <div key={rec.id} onClick={() => openProduct(rec)}

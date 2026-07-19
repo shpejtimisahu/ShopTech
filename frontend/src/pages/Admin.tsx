@@ -574,10 +574,16 @@ function Admin() {
                   </td>
                   <td className="p-3">
                     {u.is_admin ? (
-                      <button onClick={() => removeAdmin(u.id)}
-                        className="text-xs px-3 py-1 rounded-lg bg-red-50 text-red-500 font-semibold hover:bg-red-100 transition-colors">
-                        Remove Admin
-                      </button>
+                      u.username === "admin" ? (
+                        <span className="text-xs px-3 py-1 rounded-lg bg-gray-50 text-gray-400 italic">
+                          Primary Admin
+                        </span>
+                      ) : (
+                        <button onClick={() => removeAdmin(u.id)}
+                          className="text-xs px-3 py-1 rounded-lg bg-red-50 text-red-500 font-semibold hover:bg-red-100 transition-colors">
+                          Remove Admin
+                        </button>
+                      )
                     ) : (
                       <button onClick={() => makeAdmin(u.id)}
                         className="text-xs px-3 py-1 rounded-lg bg-purple-50 text-purple-600 font-semibold hover:bg-purple-100 transition-colors">
@@ -676,6 +682,24 @@ function Admin() {
                   ))}
                 </div>
 
+                {/* Delivery / contact details (Cash on Delivery) */}
+                {(order.address || order.full_name || order.phone) && (
+                  <div className="px-5 py-3 border-t border-gray-100 bg-gray-50/60">
+                    <p className="text-xs font-semibold text-gray-500 mb-1.5">📦 Delivery details</p>
+                    <div className="text-sm text-gray-700 space-y-0.5">
+                      {order.full_name && <p><span className="text-gray-400">Name:</span> {order.full_name}</p>}
+                      {order.phone && <p><span className="text-gray-400">Phone:</span> {order.phone}</p>}
+                      {order.address && (
+                        <p>
+                          <span className="text-gray-400">Address:</span> {order.address}
+                          {order.city ? `, ${order.city}` : ""}
+                          {order.postal_code ? ` ${order.postal_code}` : ""}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Status update actions - progressive flow */}
                 {order.status !== "delivered" && order.status !== "cancelled" && (
                   <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 flex items-center gap-2">
@@ -693,10 +717,9 @@ function Admin() {
                       </button>
                     )}
                     {order.status === "shipped" && (
-                      <button onClick={() => updateOrderStatus(order.id, "delivered")}
-                        className="text-xs px-3 py-1.5 rounded-lg bg-green-100 text-green-700 font-semibold hover:bg-green-200 transition-colors">
-                        ✓ Mark as Delivered
-                      </button>
+                      <span className="text-xs px-3 py-1.5 rounded-lg bg-purple-50 text-purple-500 italic">
+                        Waiting for customer to confirm receipt
+                      </span>
                     )}
                     <button onClick={() => updateOrderStatus(order.id, "cancelled")}
                       className="text-xs px-3 py-1.5 rounded-lg bg-red-100 text-red-600 font-semibold hover:bg-red-200 transition-colors ml-auto">

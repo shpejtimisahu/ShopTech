@@ -22,7 +22,7 @@ function Privacy() {
 
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">4. Payment Information</h2>
-          <p>All payments are processed securely through Stripe. Your card details never pass through or get stored on our servers — they are handled directly by Stripe's secure systems.</p>
+          <p>All orders are paid via Cash on Delivery. No card or online payment details are collected or stored on our servers — payment happens in person when your order is delivered.</p>
         </section>
 
         <section>

@@ -5,8 +5,6 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
-    STRIPE_SECRET_KEY: str = ""
-    STRIPE_PUBLISHABLE_KEY: str = ""
     ADMIN_USERNAME: str = "admin"
     ADMIN_EMAIL: str = "admin@gmail.com"
     ADMIN_PASSWORD: str = "admin123"

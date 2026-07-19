@@ -8,7 +8,7 @@ from app.models.cart import Cart
 from app.models.cart_item import CartItem
 from app.models.product import Product
 from app.models.user import User
-from app.schemas.order import OrderOut, OrderItemOut
+from app.schemas.order import OrderOut, OrderItemOut, CheckoutIn
 from app.utils.jwt import get_current_user
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
@@ -31,13 +31,20 @@ def enrich_order(order: Order, db: Session) -> OrderOut:
         total_price=order.total_price,
         status=order.status,
         created_at=order.created_at,
-        items=enriched_items
+        items=enriched_items,
+        full_name=order.full_name,
+        phone=order.phone,
+        address=order.address,
+        city=order.city,
+        postal_code=order.postal_code,
+        payment_method=order.payment_method
     )
 
 
-# ✅ CHECKOUT
+# ✅ CHECKOUT (Cash on Delivery)
 @router.post("/checkout", response_model=OrderOut)
 def checkout(
+    payload: CheckoutIn,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -60,8 +67,17 @@ def checkout(
                 detail=f"Not enough stock for '{product.name}'. Available: {product.stock}"
             )
 
-    # Create order
-    order = Order(user_id=current_user.id, total_price=0)
+    # Create order (cash on delivery — no online payment)
+    order = Order(
+        user_id=current_user.id,
+        total_price=0,
+        full_name=payload.full_name,
+        phone=payload.phone,
+        address=payload.address,
+        city=payload.city,
+        postal_code=payload.postal_code,
+        payment_method="cash",
+    )
     db.add(order)
     db.commit()
     db.refresh(order)

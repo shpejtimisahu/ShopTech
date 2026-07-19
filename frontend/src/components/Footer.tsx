@@ -70,7 +70,7 @@ function Footer() {
           <div style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
             <span style={{ backgroundColor: "rgba(255,255,255,0.1)", color: "#d1d5db", fontSize: "0.72rem", fontWeight: 500, padding: "0.2rem 0.5rem", borderRadius: "0.25rem" }}>VISA</span>
             <span style={{ backgroundColor: "rgba(255,255,255,0.1)", color: "#d1d5db", fontSize: "0.72rem", fontWeight: 500, padding: "0.2rem 0.5rem", borderRadius: "0.25rem" }}>Mastercard</span>
-            <span style={{ backgroundColor: "rgba(255,255,255,0.1)", color: "#d1d5db", fontSize: "0.72rem", fontWeight: 500, padding: "0.2rem 0.5rem", borderRadius: "0.25rem" }}>Stripe</span>
+            <span style={{ backgroundColor: "rgba(255,255,255,0.1)", color: "#d1d5db", fontSize: "0.72rem", fontWeight: 500, padding: "0.2rem 0.5rem", borderRadius: "0.25rem" }}>Cash on Delivery</span>
           </div>
         </div>
       </div>

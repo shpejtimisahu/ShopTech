@@ -20,6 +20,20 @@ class OrderOut(BaseModel):
     status: str
     created_at: datetime
     items: List[OrderItemOut] = []
+    full_name: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    city: Optional[str] = None
+    postal_code: Optional[str] = None
+    payment_method: Optional[str] = "cash"
 
     class Config:
         from_attributes = True
+
+
+class CheckoutIn(BaseModel):
+    full_name: str
+    phone: str
+    address: str
+    city: str
+    postal_code: Optional[str] = None
