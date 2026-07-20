@@ -223,12 +223,7 @@ function Home() {
             <span className="inline-flex items-center gap-1.5 bg-white/5 backdrop-blur border border-white/10 text-white/70 text-xs px-3 py-1.5 rounded-lg">
               🚚 Fast Delivery
             </span>
-            <span className="inline-flex items-center gap-1.5 bg-white/5 backdrop-blur border border-white/10 text-white/70 text-xs px-3 py-1.5 rounded-lg">
-              🔒 Secure Payment
-            </span>
-            <span className="inline-flex items-center gap-1.5 bg-white/5 backdrop-blur border border-white/10 text-white/70 text-xs px-3 py-1.5 rounded-lg">
-              🤖 AI Recommendations
-            </span>
+
           </div>
         </div>
       </div>
