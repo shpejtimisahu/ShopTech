@@ -16,6 +16,7 @@ import Terms from "./pages/Terms";
 import Returns from "./pages/Returns";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import { ToastProvider } from "./components/Toast";
 
 export const PendingOrdersContext = createContext<{
@@ -26,7 +27,9 @@ export const PendingOrdersContext = createContext<{
   orderNotifications: number;
   cancelledNotifications: number;
   clearOrderNotifications: () => void;
-}>({ pendingOrders: 0, refreshPending: () => {}, cartCount: 0, refreshCart: () => {}, orderNotifications: 0, cancelledNotifications: 0, clearOrderNotifications: () => {} });
+  myPendingOrders: number;
+  refreshOrderNotifications: () => void;
+}>({ pendingOrders: 0, refreshPending: () => {}, cartCount: 0, refreshCart: () => {}, orderNotifications: 0, cancelledNotifications: 0, clearOrderNotifications: () => {}, myPendingOrders: 0, refreshOrderNotifications: () => {} });
 
 export const usePendingOrders = () => useContext(PendingOrdersContext);
 export const useCart = () => useContext(PendingOrdersContext);
@@ -34,7 +37,7 @@ export const useCart = () => useContext(PendingOrdersContext);
 function Navbar({ isAdmin, onLogout }: { isAdmin: boolean; onLogout: () => void }) {
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const { pendingOrders, cartCount, orderNotifications, cancelledNotifications } = usePendingOrders();
+  const { pendingOrders, cartCount, orderNotifications, cancelledNotifications, myPendingOrders } = usePendingOrders();
   const isActive = (path: string) => location.pathname === path;
 
   return (
@@ -83,6 +86,11 @@ function Navbar({ isAdmin, onLogout }: { isAdmin: boolean; onLogout: () => void 
                 {link.path === "/orders" && (cancelledNotifications > 0 || orderNotifications > 0) && (
                   <span className={`absolute -top-1 -right-1 ${cancelledNotifications > 0 ? "bg-red-500" : "bg-green-500"} text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center`}>
                     {cancelledNotifications > 0 ? cancelledNotifications : orderNotifications}
+                  </span>
+                )}
+                {link.path === "/orders" && cancelledNotifications === 0 && orderNotifications === 0 && myPendingOrders > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {myPendingOrders > 9 ? "9+" : myPendingOrders}
                   </span>
                 )}
               </Link>
@@ -135,6 +143,7 @@ function App() {
   const [cartCount, setCartCount] = useState(0);
   const [orderNotifications, setOrderNotifications] = useState(0);
   const [cancelledNotifications, setCancelledNotifications] = useState(0);
+  const [myPendingOrders, setMyPendingOrders] = useState(0);
 
   const refreshPending = () => {
     const token = localStorage.getItem("token");
@@ -170,6 +179,7 @@ function App() {
       localStorage.setItem("order_statuses", JSON.stringify(newStored));
       setOrderNotifications(newDelivered);
       setCancelledNotifications(newCancelled);
+      setMyPendingOrders(res.data.filter((o: any) => o.status === "pending").length);
     }).catch(() => {});
   };
 
@@ -211,12 +221,13 @@ function App() {
     setCartCount(0);
     setOrderNotifications(0);
     setCancelledNotifications(0);
+    setMyPendingOrders(0);
     window.location.href = "/login";
   };
 
   return (
     <ToastProvider>
-    <PendingOrdersContext.Provider value={{ pendingOrders, refreshPending, cartCount, refreshCart, orderNotifications, cancelledNotifications, clearOrderNotifications }}>
+    <PendingOrdersContext.Provider value={{ pendingOrders, refreshPending, cartCount, refreshCart, orderNotifications, cancelledNotifications, clearOrderNotifications, myPendingOrders, refreshOrderNotifications }}>
       <div className="min-h-screen bg-gray-50" style={{ fontFamily: "'Outfit', sans-serif" }}>
         <Navbar isAdmin={isAdmin} onLogout={handleLogout} />
         <main>
@@ -226,7 +237,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
             <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
-            <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+            <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />

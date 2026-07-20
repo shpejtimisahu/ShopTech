@@ -7,6 +7,8 @@ from sqlalchemy import or_
 from app.db.session import get_db
 from app.models.product import Product
 from app.schemas.product import ProductCreate, ProductOut, ProductUpdate, ProductPage
+from app.utils.jwt import get_current_admin
+from app.models.user import User
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -16,7 +18,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # CREATE PRODUCT
 @router.post("/", response_model=ProductOut)
-def create_product(product: ProductCreate, db: Session = Depends(get_db)):
+def create_product(product: ProductCreate, db: Session = Depends(get_db), current_admin: User = Depends(get_current_admin)):
     db_product = Product(**product.model_dump())
     db.add(db_product)
     db.commit()
@@ -51,7 +53,7 @@ def get_products(skip: int = 0, limit: int = 8, name: str = None, category: str 
 
 # GET ALL PRODUCTS FOR ADMIN (includes out of stock)
 @router.get("/admin/all", response_model=list[ProductOut])
-def get_all_products_admin(skip: int = 0, limit: int = 100, name: str = None, db: Session = Depends(get_db)):
+def get_all_products_admin(skip: int = 0, limit: int = 100, name: str = None, db: Session = Depends(get_db), current_admin: User = Depends(get_current_admin)):
     query = db.query(Product)
     if name:
         query = query.filter(Product.name.ilike(f"%{name}%"))
@@ -69,7 +71,7 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
 
 # UPDATE PRODUCT
 @router.put("/{product_id}", response_model=ProductOut)
-def update_product(product_id: int, updated: ProductUpdate, db: Session = Depends(get_db)):
+def update_product(product_id: int, updated: ProductUpdate, db: Session = Depends(get_db), current_admin: User = Depends(get_current_admin)):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
@@ -85,7 +87,8 @@ def update_product(product_id: int, updated: ProductUpdate, db: Session = Depend
 async def upload_image(
     product_id: int,
     file: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
 ):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
@@ -114,7 +117,7 @@ async def upload_image(
 
 # DELETE PRODUCT
 @router.delete("/{product_id}")
-def delete_product(product_id: int, db: Session = Depends(get_db)):
+def delete_product(product_id: int, db: Session = Depends(get_db), current_admin: User = Depends(get_current_admin)):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")

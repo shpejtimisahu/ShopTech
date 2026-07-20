@@ -36,7 +36,7 @@ def read_users_me(current_user: User = Depends(get_current_user)):
 
 
 @router.get("/all", response_model=list[UserOut])
-def get_all_users(db: Session = Depends(get_db)):
+def get_all_users(db: Session = Depends(get_db), current_admin: User = Depends(get_current_admin)):
     return db.query(User).all()
 
 

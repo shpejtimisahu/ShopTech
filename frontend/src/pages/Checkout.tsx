@@ -7,7 +7,7 @@ function Checkout() {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { refreshCart } = useCart();
+  const { refreshCart, refreshOrderNotifications } = useCart();
 
   const [form, setForm] = useState({
     full_name: "",
@@ -41,6 +41,7 @@ function Checkout() {
     try {
       await api.post("/orders/checkout", form);
       refreshCart();
+      refreshOrderNotifications();
       navigate("/payment-success");
     } catch (err: any) {
       setError(err.response?.data?.detail || "Could not place order. Please try again.");
